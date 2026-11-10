@@ -1,0 +1,77 @@
+{
+  "name": "tea-effect-native",
+  "version": "0.1.0",
+  "description": "The Elm Architecture for React Native with Effect",
+  "keywords": [
+    "elm",
+    "tea",
+    "the-elm-architecture",
+    "effect",
+    "effect-ts",
+    "functional-programming",
+    "react-native",
+    "typescript"
+  ],
+  "author": "Marko Savic",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || ^24.3.0 || >=26.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/savkelita/tea-effect-native"
+  },
+  "homepage": "https://github.com/savkelita/tea-effect-native#readme",
+  "bugs": {
+    "url": "https://github.com/savkelita/tea-effect-native/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./Root": {
+      "types": "./dist/Root.d.ts",
+      "default": "./dist/Root.js"
+    },
+    "./Stack": {
+      "types": "./dist/Stack.d.ts",
+      "default": "./dist/Stack.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "docs:api": "npm run build && docgen",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "effect": "~4.0.7",
+    "react": "^19.3.0",
+    "react-native": "^0.88.1",
+    "tea-effect": "^0.11.0"
+  },
+  "devDependencies": {
+    "@effect/docgen": "^0.5.2",
+    "@types/react": "~19.3.0",
+    "@types/react-dom": "~19.3.0",
+    "effect": "4.0.7",
+    "happy-dom": "^20.11.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.1",
+    "tea-effect": "0.11.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.0.0"
+  }
+}
