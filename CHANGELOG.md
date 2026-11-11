@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-11-11
+
+### Added
+
+- Storage: `make(backend, options?)` makes a storage over AsyncStorage, `expo-secure-store` or any backend with `getItem`, `setItem` and `removeItem`, and the package depends on none of them. A storage has the tasks and commands of `tea-effect/LocalStorage` - `getTask`, `setTask`, `removeTask`, `get`, `set`, `setIgnoreErrors`, `remove` and `removeIgnoreErrors` - with values encoded and decoded by a `Schema`
+- Storage: `StorageError` tells apart `ReadFailed`, `WriteFailed`, `TimedOut`, `JsonParseError`, `DecodeError` and `EncodeError`, with a constructor for each. Reads fail with `TimedOut` after 10 seconds, or after `readTimeout`
+- The root entry re-exports it as `Storage`, and `tea-effect-native/Storage` exports it as a subpath
+
 ## [0.1.0] - 2026-11-10
 
 ### Added
