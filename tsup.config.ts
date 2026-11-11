@@ -5,6 +5,7 @@ export default defineConfig({
     'src/index.ts',
     'src/Root.ts',
     'src/Stack.ts',
+    'src/Storage.ts',
   ],
   format: ['esm'],
   dts: true,

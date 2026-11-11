@@ -75,14 +75,52 @@ export const subscriptions = (model: Model): Sub.Sub<Msg> =>
 
 Every `Stack.make()` gets its own subscription key, so a model can listen to several stacks at once, or move from one to another. The key does not depend on `toMsg`: while the model keeps a subscription, the runtime keeps the first `toMsg`. Pass message constructors such as `routeRequested` and `backPressed`, not closures over the model.
 
+## Storage
+
+React Native has no storage of its own, so `tea-effect-native/Storage` makes one from a backend: the three methods that AsyncStorage, `expo-secure-store` and similar libraries share. The package depends on none of them. An application usually makes two storages, one for ordinary data and one for secrets:
+
+```ts
+// storage.ts
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
+import * as Storage from "tea-effect-native/Storage";
+
+export const storage = Storage.make(AsyncStorage);
+
+export const secureStore = Storage.make({
+  getItem: getItemAsync,
+  setItem: setItemAsync,
+  removeItem: deleteItemAsync,
+});
+```
+
+Both have the tasks and commands of `tea-effect/LocalStorage`. Values are encoded and decoded with a `Schema`, and a key that is not there reads as `Option.none()` (`sessionLoaded: (session: Option.Option<Session>) => Msg`, `sessionLoadFailed: (error: Storage.StorageError) => Msg`):
+
+```ts
+const loadSession = secureStore.get("session", Session, {
+  onSuccess: sessionLoaded,
+  onError: sessionLoadFailed,
+});
+```
+
+```ts
+case "SignedOut":
+  return [initial, secureStore.removeIgnoreErrors("session")];
+```
+
+`StorageError` tells apart a backend that threw (`ReadFailed`, `WriteFailed`), a read that did not answer (`TimedOut`) and a value that does not fit (`JsonParseError`, `DecodeError`, `EncodeError`). Reads time out after 10 seconds, so a native read that never answers cannot keep the application waiting at startup. `Storage.make(backend, { readTimeout })` changes that, for example for a secure store behind biometrics.
+
+Unlike `LocalStorage`, a storage has no `clear`, `keys` or `onChange`: `expo-secure-store` has neither `clear` nor `keys`, and an application has no other tabs whose writes `onChange` would report. A secure store also limits keys; `expo-secure-store` takes only letters, digits, `.`, `-` and `_`.
+
 ## Module Structure
 
-| Module  | Description                                                 |
-| ------- | ----------------------------------------------------------- |
-| `Root`  | The root component a program renders into                   |
-| `Stack` | Pushing routes and Android's back button for a screen stack |
+| Module    | Description                                                                       |
+| --------- | --------------------------------------------------------------------------------- |
+| `Root`    | The root component a program renders into                                         |
+| `Stack`   | Pushing routes and Android's back button for a screen stack                       |
+| `Storage` | Values kept across launches, over AsyncStorage, a secure store or another backend |
 
-The root `tea-effect-native` entry re-exports both, as `Root` and `Stack`.
+The root `tea-effect-native` entry re-exports all three, as `Root`, `Stack` and `Storage`.
 
 ## Requirements
 

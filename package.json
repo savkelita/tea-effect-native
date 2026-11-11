@@ -40,6 +40,10 @@
     "./Stack": {
       "types": "./dist/Stack.d.ts",
       "default": "./dist/Stack.js"
+    },
+    "./Storage": {
+      "types": "./dist/Storage.d.ts",
+      "default": "./dist/Storage.js"
     }
   },
   "files": [
