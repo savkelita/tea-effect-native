@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-11-14
+
+### Added
+
+- Stack: `Screens` and `Entry` keep the stack of screens in the model - entries from the root to the top, each under a key that is never given twice - and `of`, `push`, `pop`, `dismiss`, `set`, `get`, `top` and `canGoBack` change and read it. The root always stays, and a key that has left the stack reads `None` and sets nothing, so a message for a closed screen changes nothing
+- Stack: `keyed(toMsg)` remembers one message wrapper per key, so `Html.map` hands a screen the same dispatch on every render and `memo` under it holds
+- Stack: `onBack(screens, toMsg)` subscribes to Android's back button only while there is a screen to go back from, so on the root the press leaves the app as usual
+- ScreenStack: a new module that draws a `Stack.Screens` with `react-native-screens`. Every screen fills the stack and stays active, so presses on pushed screens land; the native header is hidden; the iOS swipe back is on for every screen but the root and reports through `onDismissed`; Android's back button is left to the model
+- `react-native-screens ^4.30.1` is an optional peer dependency, used only by `tea-effect-native/ScreenStack`. The root entry does not re-export `ScreenStack`, so an application without `react-native-screens` can import everything else from it
+
 ## [0.2.0] - 2026-11-11
 
 ### Added
