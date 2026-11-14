@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-11-14
+
+### Added
+
+- AppState: `onChange(toMsg)` subscribes to the application coming to the foreground and leaving it, with React Native's `AppStateStatus` as `Status`
+- Linking: `getInitialUrl` and `getInitialUrlTask` read the link that started the application, as `Option.none()` when there was none; `onUrl(toMsg)` subscribes to the links that arrive while it runs
+- Linking: `openUrl`, `openUrlTask` and `openUrlIgnoreErrors` open a link in the application registered for it. `LinkingError` tells apart `InitialUrlFailed` and `OpenFailed`, which names the link no application could open
+- The root entry re-exports both, as `AppState` and `Linking`, and `tea-effect-native/AppState` and `tea-effect-native/Linking` export them as subpaths
+- An example application in `examples/notes` uses every module: `Root`, `Stack` with `ScreenStack`, `Storage`, `AppState` and `Linking`
+
 ## [0.3.0] - 2026-11-14
 
 ### Added
