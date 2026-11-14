@@ -4,6 +4,7 @@ export default defineConfig({
   entry: [
     'src/index.ts',
     'src/Root.ts',
+    'src/ScreenStack.ts',
     'src/Stack.ts',
     'src/Storage.ts',
   ],
@@ -12,5 +13,5 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   treeshake: true,
-  external: ['effect', 'react', 'react-native', 'tea-effect'],
+  external: ['effect', 'react', 'react-native', 'react-native-screens', 'tea-effect'],
 })

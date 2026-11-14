@@ -37,6 +37,10 @@
       "types": "./dist/Root.d.ts",
       "default": "./dist/Root.js"
     },
+    "./ScreenStack": {
+      "types": "./dist/ScreenStack.d.ts",
+      "default": "./dist/ScreenStack.js"
+    },
     "./Stack": {
       "types": "./dist/Stack.d.ts",
       "default": "./dist/Stack.js"
@@ -62,7 +66,13 @@
     "effect": "~4.0.7",
     "react": "^19.3.0",
     "react-native": "^0.88.1",
+    "react-native-screens": "^4.30.1",
     "tea-effect": "^0.11.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native-screens": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@effect/docgen": "^0.5.2",
@@ -73,6 +83,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-native": "0.88.1",
+    "react-native-screens": "4.30.1",
     "tea-effect": "0.11.0",
     "tsup": "^8.0.0",
     "typescript": "^5.9.0",
