@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "tea-effect-native notes",
+    "slug": "tea-effect-native-notes",
+    "version": "1.0.0",
+    "scheme": "teanotes",
+    "orientation": "portrait",
+    "ios": {
+      "bundleIdentifier": "io.github.savkelita.teaeffectnative.notes"
+    },
+    "android": {
+      "package": "io.github.savkelita.teaeffectnative.notes",
+      "predictiveBackGestureEnabled": false
+    }
+  }
+}

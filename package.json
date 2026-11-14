@@ -33,6 +33,14 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./AppState": {
+      "types": "./dist/AppState.d.ts",
+      "default": "./dist/AppState.js"
+    },
+    "./Linking": {
+      "types": "./dist/Linking.d.ts",
+      "default": "./dist/Linking.js"
+    },
     "./Root": {
       "types": "./dist/Root.d.ts",
       "default": "./dist/Root.js"

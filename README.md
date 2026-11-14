@@ -187,6 +187,49 @@ case "SignedOut":
 
 Unlike `LocalStorage`, a storage has no `clear`, `keys` or `onChange`: `expo-secure-store` has neither `clear` nor `keys`, and an application has no other tabs whose writes `onChange` would report. A secure store also limits keys; `expo-secure-store` takes only letters, digits, `.`, `-` and `_`.
 
+## AppState
+
+A browser tab reports that it was hidden and shown again; an application on a phone goes to the background and comes back. `tea-effect-native/AppState` turns that into a subscription (`statusChanged: (status: AppState.Status) => Msg`, `refresh: Cmd.Cmd<Msg>`):
+
+```ts
+export const subscriptions = (model: Model): Sub.Sub<Msg> => AppState.onChange(statusChanged);
+```
+
+```ts
+case "StatusChanged":
+  return msg.status === "active" && model.status !== "active"
+    ? [{ ...model, status: msg.status }, refresh]
+    : [{ ...model, status: msg.status }, Cmd.none];
+```
+
+While an application is in the background its JavaScript may be paused, so timers stop and nothing is redrawn. The change back to `active` is the moment to refresh what may have gone stale. Only changes arrive, not the state at the start; an application the user opens starts `active`.
+
+The window's size, the color scheme and the keyboard have no module here: React Native's hooks, such as `useWindowDimensions` and `useColorScheme`, give them to the view directly, and the model rarely needs them.
+
+## Linking
+
+A link reaches the application only when its scheme is registered for it, for example `"scheme": "notes"` in Expo's `app.json`. `tea-effect-native/Linking` gives the link that started the application and the links that arrive while it runs, both as they came, and the application decides which screen a link means (`initialUrl: (url: Option.Option<string>) => Msg`, `urlReceived: (url: string) => Msg`):
+
+```ts
+export const init: [Model, Cmd.Cmd<Msg>] = [
+  initial,
+  Linking.getInitialUrl({ onSuccess: initialUrl, onError: () => initialUrl(Option.none()) }),
+];
+
+export const subscriptions = (model: Model): Sub.Sub<Msg> => Linking.onUrl(urlReceived);
+```
+
+A development build is itself started by a link, the one that points it at the development server, so recognize your own links and ignore the rest.
+
+`openUrl` hands a link to the application registered for it, such as the browser for `https:` or the dialer for `tel:`. It fails with `OpenFailed` when no application can open it (`linkOpened: () => Msg`, `linkFailed: (error: Linking.LinkingError) => Msg`):
+
+```ts
+case "HelpPressed":
+  return [model, Linking.openUrl("https://example.com/help", { onSuccess: linkOpened, onError: linkFailed })];
+```
+
+As in `Storage`, the commands have tasks for raw `Effect` access (`getInitialUrlTask`, `openUrlTask`), and `openUrlIgnoreErrors` produces no message at all.
+
 ## Module Structure
 
 | Module        | Description                                                                         |
@@ -195,8 +238,23 @@ Unlike `LocalStorage`, a storage has no `clear`, `keys` or `onChange`: `expo-sec
 | `Stack`       | A stack of screens kept in the model, pushing routes and Android's back button      |
 | `ScreenStack` | Draws a stack of screens with `react-native-screens`, an optional peer dependency   |
 | `Storage`     | Values kept across launches, over AsyncStorage, a secure store or another backend   |
+| `AppState`    | The application coming to the foreground and leaving it                             |
+| `Linking`     | The link that started the application, links that arrive, and opening a link        |
 
-The root `tea-effect-native` entry re-exports `Root`, `Stack` and `Storage`. `ScreenStack` is a subpath only, because it needs `react-native-screens`.
+The root `tea-effect-native` entry re-exports `Root`, `Stack`, `Storage`, `AppState` and `Linking`. `ScreenStack` is a subpath only, because it needs `react-native-screens`.
+
+## Example
+
+[`examples/notes`](examples/notes) is a small Expo application that uses every module: a list of notes and a note screen on a `Stack` drawn by `ScreenStack`, the note opened last kept in `Storage`, the returns to the application counted with `AppState`, and `teanotes://note/2` opening a note through `Linking`. It uses the library from this repository, so build the library first:
+
+```sh
+npm run build
+cd examples/notes
+npm install
+npx expo run:android
+```
+
+Its README shows how to try the links and what each part demonstrates.
 
 ## Requirements
 

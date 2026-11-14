@@ -5,7 +5,8 @@
  * `tea-effect`, and this package connects a program to the platform. This entry
  * re-exports the modules, beginning with `Root` below: what a program renders
  * into. The subpaths - `tea-effect-native/Root`, `tea-effect-native/Stack`,
- * `tea-effect-native/Storage` - export the same modules, as `tea-effect/Cmd` does.
+ * `tea-effect-native/Storage`, `tea-effect-native/AppState`,
+ * `tea-effect-native/Linking` - export the same modules, as `tea-effect/Cmd` does.
  * `tea-effect-native/ScreenStack` is a subpath only: it needs
  * `react-native-screens`, so this entry leaves it out and an application without
  * that package can still import everything else from here.
@@ -32,3 +33,18 @@ export * as Stack from './Stack'
  * @since 0.2.0
  */
 export * as Storage from './Storage'
+
+/**
+ * The application coming to the foreground and leaving it, as a subscription.
+ *
+ * @since 0.4.0
+ */
+export * as AppState from './AppState'
+
+/**
+ * Links: the one that started the application, the ones that arrive while it runs,
+ * and opening a link in another application.
+ *
+ * @since 0.4.0
+ */
+export * as Linking from './Linking'

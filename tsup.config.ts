@@ -3,6 +3,8 @@ import { defineConfig } from 'tsup'
 export default defineConfig({
   entry: [
     'src/index.ts',
+    'src/AppState.ts',
+    'src/Linking.ts',
     'src/Root.ts',
     'src/ScreenStack.ts',
     'src/Stack.ts',
