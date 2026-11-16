@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-11-14
+
+### Added
+
+- Alert: `alert(config)` shows the platform's alert dialog. It takes React Native's fields in one record, as `Http.request` does, with a message in place of each callback: pressing a button sends its `onPress`, and dismissing the dialog on Android, allowed by `cancelable`, sends `onDismiss`. A button without a message closes the dialog and sends nothing. The dialog needs at least one button, so every way of closing it ends the command
+- Share: `shareTask`, `share` and `shareIgnoreErrors` open the platform's share sheet with React Native's content and options in one `Content` record. `Result` is `Shared`, with the activity when iOS names one, or `Dismissed`, which only iOS reports; `ShareError` is `ShareFailed`
+- The root entry re-exports both, as `Alert` and `Share`, and `tea-effect-native/Alert` and `tea-effect-native/Share` export them as subpaths
+- The example application asks with `Alert` before the note screen leaves the app, and shares a note with `Share`
+
 ## [0.4.0] - 2026-11-14
 
 ### Added
