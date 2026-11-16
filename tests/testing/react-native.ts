@@ -67,6 +67,57 @@ export const Linking = {
 
 export const receiveUrl = (url: string): void => urlListeners.forEach(listener => listener({ url }))
 
+type AlertButton = {
+  readonly text?: string
+  readonly onPress?: () => void
+  readonly style?: string
+  readonly isPreferred?: boolean
+}
+
+type AlertOptions = {
+  readonly cancelable?: boolean
+  readonly onDismiss?: () => void
+  readonly userInterfaceStyle?: string
+}
+
+type ShownAlert = {
+  readonly title: string
+  readonly message: string | undefined
+  readonly buttons: ReadonlyArray<AlertButton> | undefined
+  readonly options: AlertOptions | undefined
+}
+
+// Every dialog shown, newest last, as React Native was given it. A test closes the newest one as the user
+// would, and empties the list afterwards.
+export const alerts: Array<ShownAlert> = []
+
+export const Alert = {
+  alert: (title: string, message?: string, buttons?: ReadonlyArray<AlertButton>, options?: AlertOptions): void => {
+    alerts.push({ title, message, buttons, options })
+  },
+}
+
+// As React Native does: a press calls the button's onPress, and a dismissal calls onDismiss.
+export const pressAlertButton = (index: number): void => alerts.at(-1)?.buttons?.[index]?.onPress?.()
+
+export const dismissAlert = (): void => alerts.at(-1)?.options?.onDismiss?.()
+
+type ShareAnswer = { readonly action: string; readonly activityType: string | null | undefined }
+
+// What Share.share answers, and every call it was given. A test sets the answer before it runs a task, and
+// resets both afterwards.
+export const sharing = {
+  answer: (): Promise<ShareAnswer> => Promise.resolve({ action: 'sharedAction', activityType: null }),
+  calls: [] as Array<{ readonly content: unknown; readonly options: unknown }>,
+}
+
+export const Share = {
+  share: (content: unknown, options?: unknown): Promise<ShareAnswer> => {
+    sharing.calls.push({ content, options })
+    return sharing.answer()
+  },
+}
+
 export const StyleSheet = {
   absoluteFill: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 },
   create: <T>(styles: T): T => styles,

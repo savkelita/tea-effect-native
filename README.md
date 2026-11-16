@@ -230,6 +230,48 @@ case "HelpPressed":
 
 As in `Storage`, the commands have tasks for raw `Effect` access (`getInitialUrlTask`, `openUrlTask`), and `openUrlIgnoreErrors` produces no message at all.
 
+## Alert
+
+React Native's `Alert.alert` takes a callback for each button. `tea-effect-native/Alert` takes the same fields in one record, as `Http.request` does, and a button carries a message instead: pressing it sends that message (`deleteConfirmed: Msg`):
+
+```ts
+case "DeletePressed":
+  return [
+    model,
+    Alert.alert({
+      title: "Delete the note?",
+      message: "It cannot be undone.",
+      buttons: [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: deleteConfirmed },
+      ],
+    }),
+  ];
+```
+
+A button without a message closes the dialog and sends nothing, so `Cancel` needs none. The dialog needs at least one button, and every way of closing it ends the command.
+
+Android shows at most three buttons, the first three, and lets the user dismiss the dialog - by tapping outside it or with the back button - only with `cancelable: true`; dismissing sends `onDismiss`, when there is one. iOS shows every button and has no dismissal. `Alert.prompt` has no counterpart, because only iOS has it.
+
+## Share
+
+`tea-effect-native/Share` opens the platform's share sheet, with React Native's content and options in one record, and reports how it closed (`shareClosed: (result: Share.Result) => Msg`, `shareFailed: (error: Share.ShareError) => Msg`):
+
+```ts
+case "SharePressed":
+  return [
+    model,
+    Share.share(
+      { message: model.note.body, title: model.note.title, dialogTitle: "Share the note" },
+      { onSuccess: shareClosed, onError: shareFailed },
+    ),
+  ];
+```
+
+`Result` is `Shared`, with the activity the user picked when iOS names one, or `Dismissed`. Only iOS tells them apart: Android reports `Shared` as soon as the sheet opens, whatever the user does next. Android also sends only `message` and `title`, so put a link in the message; iOS sends `url` too. `dialogTitle` is Android's title for the sheet, though Android 16 shows its own heading instead.
+
+As in `Linking`, `shareTask` gives raw `Effect` access, and `shareIgnoreErrors` produces no message at all.
+
 ## Module Structure
 
 | Module        | Description                                                                         |
@@ -240,12 +282,14 @@ As in `Storage`, the commands have tasks for raw `Effect` access (`getInitialUrl
 | `Storage`     | Values kept across launches, over AsyncStorage, a secure store or another backend   |
 | `AppState`    | The application coming to the foreground and leaving it                             |
 | `Linking`     | The link that started the application, links that arrive, and opening a link        |
+| `Alert`       | The platform's alert dialog, sending the message of the button the user pressed     |
+| `Share`       | The platform's share sheet, with how it closed as a message                         |
 
-The root `tea-effect-native` entry re-exports `Root`, `Stack`, `Storage`, `AppState` and `Linking`. `ScreenStack` is a subpath only, because it needs `react-native-screens`.
+The root `tea-effect-native` entry re-exports `Root`, `Stack`, `Storage`, `AppState`, `Linking`, `Alert` and `Share`. `ScreenStack` is a subpath only, because it needs `react-native-screens`.
 
 ## Example
 
-[`examples/notes`](examples/notes) is a small Expo application that uses every module: a list of notes and a note screen on a `Stack` drawn by `ScreenStack`, the note opened last kept in `Storage`, the returns to the application counted with `AppState`, and `teanotes://note/2` opening a note through `Linking`. It uses the library from this repository, so build the library first:
+[`examples/notes`](examples/notes) is a small Expo application that uses every module: a list of notes and a note screen on a `Stack` drawn by `ScreenStack`, the note opened last kept in `Storage`, the returns to the application counted with `AppState`, `teanotes://note/2` opening a note through `Linking`, an `Alert` asking before the note screen leaves the app, and the note shared with `Share`. It uses the library from this repository, so build the library first:
 
 ```sh
 npm run build

@@ -33,6 +33,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./Alert": {
+      "types": "./dist/Alert.d.ts",
+      "default": "./dist/Alert.js"
+    },
     "./AppState": {
       "types": "./dist/AppState.d.ts",
       "default": "./dist/AppState.js"
@@ -48,6 +52,10 @@
     "./ScreenStack": {
       "types": "./dist/ScreenStack.d.ts",
       "default": "./dist/ScreenStack.js"
+    },
+    "./Share": {
+      "types": "./dist/Share.d.ts",
+      "default": "./dist/Share.js"
     },
     "./Stack": {
       "types": "./dist/Stack.d.ts",

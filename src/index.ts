@@ -6,7 +6,8 @@
  * re-exports the modules, beginning with `Root` below: what a program renders
  * into. The subpaths - `tea-effect-native/Root`, `tea-effect-native/Stack`,
  * `tea-effect-native/Storage`, `tea-effect-native/AppState`,
- * `tea-effect-native/Linking` - export the same modules, as `tea-effect/Cmd` does.
+ * `tea-effect-native/Linking`, `tea-effect-native/Alert`,
+ * `tea-effect-native/Share` - export the same modules, as `tea-effect/Cmd` does.
  * `tea-effect-native/ScreenStack` is a subpath only: it needs
  * `react-native-screens`, so this entry leaves it out and an application without
  * that package can still import everything else from here.
@@ -48,3 +49,17 @@ export * as AppState from './AppState'
  * @since 0.4.0
  */
 export * as Linking from './Linking'
+
+/**
+ * The platform's alert dialog, sending the message of the button the user pressed.
+ *
+ * @since 0.5.0
+ */
+export * as Alert from './Alert'
+
+/**
+ * The platform's share sheet, with how it closed as a message.
+ *
+ * @since 0.5.0
+ */
+export * as Share from './Share'

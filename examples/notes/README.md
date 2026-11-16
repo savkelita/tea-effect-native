@@ -11,6 +11,8 @@ on a device before a release.
 | `Storage`             | `src/notes.ts` over AsyncStorage: the note opened last, also after a restart              |
 | `AppState`            | `src/app.tsx` counts the returns to the application, shown above the list                 |
 | `Linking`             | `teanotes://note/2` opens a note; the note screen opens a web page and a link nothing opens |
+| `Alert`               | the note screen asks before it leaves the app; Stay, Open and a dismissal each answer     |
+| `Share`               | the note screen shares the note and shows what the platform reported                      |
 
 ## Running
 
@@ -46,5 +48,6 @@ adb shell am start -W -a android.intent.action.VIEW -d "teanotes://note/3" io.gi
 A link that names no note, such as `teanotes://note/9`, is ignored. To try the link that starts the
 application, through `Linking.getInitialUrl`, close the application first and send the same command.
 
-The note screen opens this repository in the browser with `Linking.openUrl`, and tries a link no
-application can open, to show `OpenFailed`.
+The note screen opens this repository in the browser with `Linking.openUrl`, after an `Alert` asks
+whether to leave the app, and tries a link no application can open, to show `OpenFailed`. Its share
+button opens the share sheet; Android reports `Shared` as soon as the sheet opens.
